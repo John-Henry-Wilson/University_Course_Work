@@ -1,0 +1,11 @@
+Phase 1) calls touch 1 with appropirate buffer
+Phase 2) returns to code to put cookies in rdi before returning to touch 2
+Phase 3) Have to store cookies pash touch 3 or may be overwritten (i.e don't store cookies in buffer)
+         buffer(0x28) + 8 bytes for return address of rsp + 8 bytes for touch 3 = 0x38
+         0x5567a048 + 0x38 = 0x5567A080 (cookies address)
+Phase 4) first look for popq %rdi in dump file 
+         popq %rdi doesn't exist so use popq %rax instead
+         next need movq %rax %edi
+         Solutions format: padding, gadget 1 address, cookie, gadget 2 address, return address, and touch 2 address
+         40176a + 3 = 40176d
+         40178d + 1 = 40178e
