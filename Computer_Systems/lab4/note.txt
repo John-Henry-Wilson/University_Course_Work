@@ -1,0 +1,6 @@
+optimizations:
+1) reducing fuction calls with a loop
+2) accumulate in tempory variable
+3) Hard code inner 2 loops
+4) Change order of loops to follow row major ordering and get better locality
+5) setting optimazation flag 03 in makefile
