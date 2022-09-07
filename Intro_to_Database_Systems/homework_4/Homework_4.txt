@@ -1,0 +1,90 @@
+SELECT 
+	SupplierID, CompanyName,
+    CASE WHEN CompanyName = 'Exotic Liquids' THEN CompanyName  
+		ELSE 'something else' 
+	END AS New_CompanyName
+FROM suppliers
+;
+------------------------------------------
+SELECT 
+ 	customerid, Fax,
+	case when fax = '' then '999-999-9999' else fax end as new_fax
+FROM customers
+;
+------------------------------------------
+SELECT DISTINCT o.customerid, o.shipcity, o.shipcountry, c.customerid,
+	CASE WHEN c.customerid is null THEN '000' ELSE c.customerid END AS new_cust_id,
+	IfNull(c.customerid, '000') as new_cust_id2,
+    COALESCE(c.customerid, '000') AS new_cust_id3
+FROM orders o
+LEFT OUTER JOIN customers c on c.customerid = o.customerid
+ORDER BY new_cust_id
+-- DATE_FORMAT(date, format)
+SELECT Firstname, Lastname, BirthDate,
+	DATE(BirthDate) Birth_Date,
+	Date_Format(BirthDate, '%D') Birth_Day,
+    Date_Format(BirthDate, '%M') Birth_Month,
+    Date_Format(BirthDate, '%m/%d/%Y') Birth_Date,
+    Date_Format(BirthDate, '%d') Birth_Day2,
+    Date_Format(BirthDate, '%m') Birth_Month2,
+    Date_Format(BirthDate, '%M %D %Y') Birth_Date2    
+FROM Employees
+;
+--------------------------------------------------
+-- # Q. Employees who worked 10 years or more
+
+SELECT EmployeeID, Lastname, Firstname,hiredate, 
+	YEAR(CURDATE()) - YEAR(hiredate) AS Year_worked
+FROM Employees
+WHERE YEAR(CURDATE()) - YEAR(hiredate) >= 10
+;
+--------------------------------
+select orderid, count(*)
+from orderdetails
+group by orderid
+Having count(*) > 5
+
+-----------------------------------------
+SELECT City, COUNT(*) AS Count
+FROM Employees
+group by City
+having COUNT(*) > 3
+;
+--------------------------------------------
+select 
+	productname, 
+	count(*), 
+	sum(UnitPrice) as total_price, 
+	avg(UnitPrice) avg_price, 
+	min(UnitPrice) min_price, 
+	max(UnitPrice) max_price
+from Products
+group by productname
+;
+------------------------------------------------
+select 
+	productname, 
+	count(*), 
+	sum(UnitPrice) as total_price, 
+	avg(UnitPrice) avg_price, 
+	min(UnitPrice) min_price, 
+	max(UnitPrice) max_price
+from Products
+group by productname
+;
+SELECT OrderID, SUM(UnitPrice * Quantity) as Total_revenue
+FROM OrderDetails od
+WHERE OrderID IN (10248, 10249)
+GROUP BY OrderID
+Having Total_revenue > 1000
+;
+-----------------------------------------------------
+-- # Q. Find Product's Product Name 
+-- and Total unit price for Product Name starts with 'C'.
+
+SELECT productname, SUM(UnitPrice) AS 'Total Unit Price'
+FROM Products
+WHERE productname like 'C%'
+GROUP BY productname
+-- HAVING SUM(UnitPrice) > 20
+;
